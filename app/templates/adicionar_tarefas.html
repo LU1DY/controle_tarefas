@@ -1,0 +1,31 @@
+{% extends 'base.html' %} {%block head%}
+<title>Adicionar Tarefas</title>
+{%endblock%} {%block body%}
+<h1>Adicionar Tarefas</h1>
+<form method="POST" action="{{url_for('adicionar_tarefas')}}" class="flex flex-col">
+
+  {{form_nova_tarefa.hidden_tag()}}
+
+  <div class="flex flex-col">
+    <label for="titulo_tarefa">Título da tarefa</label>
+    {{form_nova_tarefa.titulo_tarefa(id="titulo_tarefa", type="text", placeholder="Título..." )}}
+  </div>
+
+  <div class="flex flex-col">
+    <label for="descricao_tarefa">Descrição da tarefa</label>
+    {{form_nova_tarefa.descricao_tarefa(id="descricao_tarefa", type="text", placeholder="Descrição...")}}
+  </div>
+
+  <div class="flex flex-col">
+    <label for="importancia_tarefa">Importância</label>
+    {{form_nova_tarefa.importancia_tarefa(id="importancia_tarefa")}}
+  </div>
+
+  <div class="flex flex-col">
+    <label for="data_conclusao_tarefa">Data limite</label>
+    {{form_nova_tarefa.data_conclusao_tarefa(id="data_conclusao_tarefa", type="datetime-local", placeholder="Data para realização da tarefa...")}}
+  </div>
+
+  {{form_nova_tarefa.submit_tarefa(type="submit")}}
+</form>
+{%endblock%}
