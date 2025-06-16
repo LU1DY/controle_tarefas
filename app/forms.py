@@ -5,10 +5,11 @@ from app.models import ImportanciaEnum
 from app.models import Tarefa
 
 
-class FormCriarTarefa(FlaskForm):
+class FormTarefa(FlaskForm):
     titulo_tarefa = StringField('Título da Tarefa: ', validators=[DataRequired(), Length(1, 30)])
     descricao_tarefa = StringField('Descrição da Tarefa: ', validators=[DataRequired(), Length(1, 100)])
-    importancia_tarefa = SelectField('Selecione a importância: ', choices=[(e.value, e.name.capitalize()) for e in ImportanciaEnum], validators=[DataRequired()])
+    importancia_tarefa = SelectField('Selecione a importância: ', choices=[(e.name, e.name.capitalize()) for e in ImportanciaEnum], validators=[DataRequired()])
     data_conclusao_tarefa = DateTimeLocalField('Data de conslusão: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
     submit_tarefa = SubmitField('Enviar')
+
 
