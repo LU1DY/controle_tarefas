@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{%block body%}
+
+<h1>Criar conta</h1>
+
+<form action="" method="POST">
+    {{form_criar_conta.hidden_tag()}}
+    <label>Nome de usuário: </label>
+    {{form_criar_conta.nome_usuario()}}
+    <label>E-mail: </label>
+    {{form_criar_conta.email()}}
+    <label>Senha: </label>
+    {{form_criar_conta.senha()}}
+    <label>Confirme a senha: </label>
+    {{form_criar_conta.confirmacao_senha()}}
+    {{form_criar_conta.btn_submit_criar_conta()}}
+</form>
+{%endblock%}

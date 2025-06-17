@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{%block body%}
+
+<h1>Entrar</h1>
+
+<form action="" method="POST">
+    {{form_login.hidden_tag()}}
+    <label>E-mail: </label>
+    {{form_login.email()}}
+    <label>Senha: </label>
+    {{form_login.senha()}}
+    {{form_login.btn_submit_login()}}
+</form>
+{%endblock%}

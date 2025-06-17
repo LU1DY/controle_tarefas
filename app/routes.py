@@ -1,8 +1,8 @@
-from app import app, database
-from flask import Flask, render_template, redirect, url_for, flash
-from app.models import Tarefa, ImportanciaEnum
-from app.forms import FormTarefa
-
+from app import app, database, bcrypt
+from flask import Flask, render_template, redirect, url_for, flash, request
+from app.models import Tarefa, ImportanciaEnum, Usuario
+from app.forms import FormTarefa, FormCriarConta, FormLogin
+from flask_login import login_user, current_user
 @app.route('/')
 def home():
     todas_tarefas = Tarefa.query.all()
@@ -57,3 +57,41 @@ def editar_tarefa(id_tarefa):
         print('Erro no formulário: ', form_tarefa.errors)
     return render_template('adicionar_tarefas.html', form_tarefa=form_tarefa, titulo_pagina="Editar Tarefa")
 
+
+@app.route('/criarconta', methods=["POST", "GET"])
+def criarconta():
+    form_criar_conta = FormCriarConta()
+
+    if form_criar_conta.validate_on_submit():
+        senha_bcrypt = bcrypt.generate_password_hash(form_criar_conta.senha.data).decode('utf-8')
+        usuario = Usuario(nome_usuario=form_criar_conta.nome_usuario.data, email=form_criar_conta.email.data, senha=senha_bcrypt)
+        database.session.add(usuario)
+        database.session.commit()
+        return redirect(url_for('home'))
+    else:
+        print('Erro no formulário de criar conta: ')
+        print(form_criar_conta.errors)
+    return render_template('criar_conta.html', form_criar_conta=form_criar_conta)
+
+
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    form_login = FormLogin()
+
+    if form_login.validate_on_submit():
+        usuario = Usuario.query.filter_by(email=form_login.email.data).first()
+
+        if usuario:
+            if bcrypt.check_password_hash(usuario.senha, form_login.senha.data):
+                login_user(usuario)
+                par_next = request.args.get('next')
+                return redirect(par_next) if par_next else redirect(url_for('home'))
+            else:
+                flash('Senha incorreta!')
+        else:
+            flash(f'Nenhuma conta associada ao e-mail: {form_login.email.data}', 'alert-danger')
+    else:
+        print('Erro no formulário de login: ', form_login.errors)
+
+    return render_template('login.html', form_login=form_login)

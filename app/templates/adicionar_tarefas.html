@@ -1,5 +1,5 @@
 {% extends 'base.html' %} {%block head%}
-<title>Adicionar Tarefas</title>
+<title>{{'Editar' if 'Editar' in titulo_pagina else 'Criar'}} Tarefa</title>
 {%endblock%} {%block body%}
 <h1>{{ titulo_pagina }}</h1>
 
