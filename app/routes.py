@@ -1,15 +1,24 @@
 from app import app, database, bcrypt
-from flask import Flask, render_template, redirect, url_for, flash, request
-from app.models import Tarefa, ImportanciaEnum, Usuario
+from flask import render_template, redirect, url_for, flash, request
+from app.models import Tarefa, Usuario
 from app.forms import FormTarefa, FormCriarConta, FormLogin
-from flask_login import login_user, current_user
+from flask_login import login_user, current_user, login_required, logout_user
+
+
 @app.route('/')
 def home():
+    return render_template('home.html', current_user=current_user)
+
+
+@app.route('/tarefas')
+@login_required
+def tarefas():
     todas_tarefas = Tarefa.query.all()
-    return render_template('home.html', todas_tarefas=todas_tarefas)
+    return render_template('suas_tarefas.html', todas_tarefas=todas_tarefas, current_user=current_user)
 
 
 @app.route('/adicionar_tarefas', methods=["POST", "GET"])
+@login_required
 def adicionar_tarefas():
     form_tarefa = FormTarefa()
 
@@ -31,8 +40,8 @@ def adicionar_tarefas():
     return render_template('adicionar_tarefas.html', form_tarefa=form_tarefa, titulo_pagina="Criar nova tarefa")
 
 
-
 @app.route('/remover_tarefa/<int:id_tarefa>', methods=["POST"])
+@login_required
 def remover_tarefa(id_tarefa):
     tarefa_removida = Tarefa.query.get_or_404(id_tarefa)
     if tarefa_removida:
@@ -44,6 +53,7 @@ def remover_tarefa(id_tarefa):
 
 
 @app.route('/editar_tarefa/<int:id_tarefa>', methods=["POST", "GET"])
+@login_required
 def editar_tarefa(id_tarefa):
     antigos_dados = Tarefa.query.get_or_404(id_tarefa)
     form_tarefa = FormTarefa(obj=antigos_dados)
@@ -64,15 +74,19 @@ def criarconta():
 
     if form_criar_conta.validate_on_submit():
         senha_bcrypt = bcrypt.generate_password_hash(form_criar_conta.senha.data).decode('utf-8')
-        usuario = Usuario(nome_usuario=form_criar_conta.nome_usuario.data, email=form_criar_conta.email.data, senha=senha_bcrypt)
+        usuario = Usuario(
+            nome_usuario=form_criar_conta.nome_usuario.data,
+            email=form_criar_conta.email.data,
+            senha=senha_bcrypt
+        )
         database.session.add(usuario)
         database.session.commit()
+        login_user(usuario)
         return redirect(url_for('home'))
     else:
         print('Erro no formulário de criar conta: ')
         print(form_criar_conta.errors)
     return render_template('criar_conta.html', form_criar_conta=form_criar_conta)
-
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -95,3 +109,10 @@ def login():
         print('Erro no formulário de login: ', form_login.errors)
 
     return render_template('login.html', form_login=form_login)
+
+
+@app.route('/sair')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
