@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{%block head%}
+<title>Suas tarefas </title>
+{%endblock%}
+
+{%block body%}
+<h1>Suas tarefas {{current_user.nome_usuario}} batata</h1>
+{%for tarefa in todas_tarefas%}
+<div class="tarefa" style="border: 1px solid #000">
+<h2>{{tarefa.titulo_tarefa}}</h2>
+<p>{{tarefa.descricao_tarefa}}</p>
+<div>{{tarefa.importancia_tarefa.value}}</div>
+<span>{{tarefa.data_conclusao_tarefa}}</span>
+    <div class="remover_tarefa">
+        <form
+                    action="{{ url_for('remover_tarefa', id_tarefa=tarefa.id_tarefa) }}"
+                    method="POST"
+                    style="display: inline"
+                  >
+                    <button type="submit">Remover</button>
+                  </form>
+    </div>
+    <div class="editar_tarefa">
+        <form
+                    action="{{ url_for('editar_tarefa', id_tarefa=tarefa.id_tarefa) }}"
+                    method="POST"
+                    style="display: inline"
+                  >
+                    <button type="submit">Editar</button>
+                  </form>
+    </div>
+    </div>
+{%endfor%}
+{%endblock%}

@@ -1,0 +1,20 @@
+<header class="flex w-full">
+    <nav class="flex w-full justify-between">
+        <h2>C.tarefas</h2>
+        <ul class="flex">
+            {%if current_user.is_authenticated%}
+            <li><a href="{{url_for('tarefas')}}">Tarefas</a></li>
+            <li><a href="{{url_for('logout')}}">Sair</a></li>
+            {%else%}
+            <li><a href="">Serviços</a></li>
+            <li><a href="">Sobre</a></li>
+            <li><a href="">Objetivo</a></li>
+        </ul>
+                <ul class="flex">
+                    <li><a href="{{url_for('login')}}">Entrar</a></li>
+                    <li><a href="{{url_for('criarconta')}}">Criar conta</a></li>
+                </ul>
+            {%endif%}
+
+    </nav>
+</header>
