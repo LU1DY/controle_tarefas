@@ -13,7 +13,8 @@ def home():
 @app.route('/tarefas')
 @login_required
 def tarefas():
-    todas_tarefas = Tarefa.query.all()
+
+    todas_tarefas = Tarefa.query.filter_by(usuario_id=current_user.id)
     return render_template('suas_tarefas.html', todas_tarefas=todas_tarefas, current_user=current_user)
 
 
@@ -27,7 +28,8 @@ def adicionar_tarefas():
             titulo_tarefa=form_tarefa.titulo_tarefa.data,
             descricao_tarefa=form_tarefa.descricao_tarefa.data,
             importancia_tarefa=form_tarefa.importancia_tarefa.data,
-            data_conclusao_tarefa=form_tarefa.data_conclusao_tarefa.data
+            data_conclusao_tarefa=form_tarefa.data_conclusao_tarefa.data,
+            usuario_id=current_user.id
         )
         database.session.add(tarefa)
         database.session.commit()
