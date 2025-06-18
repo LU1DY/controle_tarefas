@@ -10,7 +10,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///ControleDeTarefas.db'
 database = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
-
+from flask_migrate import Migrate
+migrate = Migrate(app, database)
 from app.models import Tarefa, Usuario
 
 
@@ -19,7 +20,7 @@ def load_user(user_id):
     return Usuario.query.get(int(user_id))
 
 
-# Rota para login, em tentativa de acesso a página com login_required sem estar logado
+# Rota para login, em tentativa de acesso a página com login_required sem estar logado, o usuário será redirecionado para a página de login
 login_manager.login_view = 'login'
 
 with app.app_context():
