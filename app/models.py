@@ -15,6 +15,7 @@ class Tarefa(database.Model):
     descricao_tarefa = database.Column(database.String(100), nullable=False)
     importancia_tarefa = database.Column(database.Enum(ImportanciaEnum), nullable=False, default=ImportanciaEnum.MEDIA)
     data_conclusao_tarefa = database.Column(database.DateTime, nullable=False)
+    usuario_id = database.Column(database.Integer, database.ForeignKey('usuario.id', name="fk_usuario_tarefa"), nullable=False)
 
 
 class Usuario(database.Model, UserMixin):
@@ -22,3 +23,5 @@ class Usuario(database.Model, UserMixin):
     nome_usuario = database.Column(database.String(30), nullable=False)
     email = database.Column(database.String(120), nullable=False, unique=True)
     senha = database.Column(database.String(200), nullable=False)
+    tarefas = database.relationship('Tarefa', backref='usuario', lazy=True)
+
