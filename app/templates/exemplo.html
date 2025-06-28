@@ -1,12 +1,9 @@
-{% extends 'base.html' %}
-
-{% block head %}
-  <title>{{ 'Editar' if 'Editar' in titulo_pagina else 'Criar' }} Tarefa</title>
-{% endblock %}
-
-{% block body %}
-
- <style>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Criar Tarefa</title>
+  <style>
     body {
       font-family: Arial, sans-serif;
       margin: 2rem;
@@ -66,38 +63,52 @@
       cursor: pointer;
     }
   </style>
+</head>
+<body>
+  <h1>Criar Tarefa</h1>
 
-  <h1 class="text-2xl font-bold mb-4">{{ titulo_pagina }}</h1>
-
-<form method="POST">
-     {{ form_tarefa.hidden_tag() }}
+  <form method="POST">
     <label for="tipo_tarefa">Tipo da Tarefa</label>
     <select id="tipo_tarefa" name="tipo_tarefa" onchange="atualizarCampos()">
       <option value="padrao">Padrão</option>
+      <option value="checklist">Checklist</option>
+      <option value="hibrida">Híbrida</option>
     </select>
 
     <label for="titulo">Título da Tarefa</label>
-    {{ form_tarefa.titulo_tarefa(id="titulo", type="text", required=True, placeholder="Ex: Preparar apresentação...") }}
+    <input type="text" id="titulo" name="titulo" required placeholder="Ex: Preparar apresentação...">
 
     <div id="campo_descricao">
       <label for="descricao">Descrição</label>
-      {{ form_tarefa.descricao_tarefa(id="descricao", type="text", placeholder="Detalhes da tarefa...") }}
+      <input type="text" id="descricao" name="descricao" placeholder="Detalhes da tarefa...">
     </div>
 
     <div id="campo_data">
       <label for="data">Data de Conclusão</label>
-      {{ form_tarefa.data_conclusao_tarefa(id="data") }}
+      <input type="datetime-local" id="data" name="data">
     </div>
 
     <div id="campo_importancia">
       <label for="importancia">Importância</label>
-      {{ form_tarefa.importancia_tarefa(id="importancia") }}
+      <select id="importancia" name="importancia">
+        <option value="ALTA">Alta</option>
+        <option value="MEDIA" selected>Média</option>
+        <option value="BAIXA">Baixa</option>
+      </select>
     </div>
 
-    {{ form_tarefa.submit_tarefa(class="mt-4 w-fit px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700", type="submit") }}
+    <div id="campo_checklist" class="hidden">
+      <label>Checklist</label>
+      <div id="checklist-container">
+        <div class="checklist-item">
+          <input type="text" name="checklist" placeholder="Etapa 1...">
+        </div>
+      </div>
+      <button type="button" class="add-btn" onclick="adicionarChecklist()">+ Adicionar etapa</button>
+    </div>
+
+    <button type="submit" class="submit-btn">Salvar Tarefa</button>
   </form>
-
-
 
   <script>
     function atualizarCampos() {
@@ -136,4 +147,5 @@
     // Carrega comportamento inicial
     atualizarCampos();
   </script>
-{% endblock %}
+</body>
+</html>

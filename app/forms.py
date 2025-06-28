@@ -5,12 +5,14 @@ from app.models import ImportanciaEnum
 from app.models import Tarefa, Usuario
 import re
 
+
 class FormTarefa(FlaskForm):
     titulo_tarefa = StringField('Título da Tarefa: ', validators=[DataRequired(), Length(1, 30)])
-    descricao_tarefa = StringField('Descrição da Tarefa: ', validators=[DataRequired(), Length(1, 100)])
-    importancia_tarefa = SelectField('Selecione a importância: ', choices=[(e.name, e.name.capitalize()) for e in ImportanciaEnum], validators=[DataRequired()])
-    data_conclusao_tarefa = DateTimeLocalField('Data de conslusão: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
+    descricao_tarefa = StringField('Descrição da Tarefa: ', validators=[Length(1, 100)])
+    importancia_tarefa = SelectField('Selecione a importância: ', choices=[(e.name, e.name.capitalize()) for e in ImportanciaEnum])
+    data_conclusao_tarefa = DateTimeLocalField('Data de conslusão: ', format='%Y-%m-%dT%H:%M')
     submit_tarefa = SubmitField('Enviar')
+
 
 class FormCriarConta(FlaskForm):
     nome_usuario = StringField('Nome de usuário', validators=[DataRequired()])
@@ -18,7 +20,6 @@ class FormCriarConta(FlaskForm):
     senha = PasswordField('Senha', validators=[DataRequired(), Length(8, 20)])
     confirmacao_senha = PasswordField('Confirme a senha', validators=[DataRequired(), EqualTo('senha')])
     btn_submit_criar_conta = SubmitField('Criar Conta')
-
     def validate_email(self, email):
         usuario = Usuario.query.filter_by(email=email.data).first()
         if usuario:
@@ -36,7 +37,6 @@ class FormCriarConta(FlaskForm):
             raise ValidationError('A senha deve conter pelo menos um caracter especial!')
 
 
-
 class FormLogin(FlaskForm):
     email = StringField('E-mail', validators=[DataRequired(), Email()])
     senha = PasswordField('Senha', validators=[DataRequired(), Length(8, 20)])
@@ -48,5 +48,8 @@ class FormLogin(FlaskForm):
             raise ValidationError(f'Nenhuma conta associada ao e-mail: {email.data}')
 
 
+class FormBuscarTarefas(FlaskForm):
+    parametro_busca = StringField('Informe oque deseja buscar: ')
+    btn_submit_buscar_tarefa = SubmitField('Buscar')
 
 

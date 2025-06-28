@@ -1,7 +1,7 @@
 from app import app, database, bcrypt
 from flask import render_template, redirect, url_for, flash, request
 from app.models import Tarefa, Usuario
-from app.forms import FormTarefa, FormCriarConta, FormLogin
+from app.forms import FormTarefa, FormCriarConta, FormLogin, FormBuscarTarefas
 from flask_login import login_user, current_user, login_required, logout_user
 
 
@@ -13,16 +13,23 @@ def home():
 @app.route('/tarefas')
 @login_required
 def tarefas():
+    form_buscar = FormBuscarTarefas()
+    parametro_busca = request.args.get('parametro_busca')
+    if not parametro_busca:
+        tarefas = Tarefa.query.filter_by(usuario_id=current_user.id).all()
+    else:
+        tarefas = Tarefa.query.filter(
+            Tarefa.usuario_id == current_user.id,
+            Tarefa.titulo_tarefa.ilike(f'%{parametro_busca}%')).all()
+    return render_template('suas_tarefas.html', tarefas=tarefas, current_user=current_user, form_buscar=form_buscar)
 
-    todas_tarefas = Tarefa.query.filter_by(usuario_id=current_user.id)
-    return render_template('suas_tarefas.html', todas_tarefas=todas_tarefas, current_user=current_user)
+
 
 
 @app.route('/adicionar_tarefas', methods=["POST", "GET"])
 @login_required
 def adicionar_tarefas():
     form_tarefa = FormTarefa()
-
     if form_tarefa.validate_on_submit():
         tarefa = Tarefa(
             titulo_tarefa=form_tarefa.titulo_tarefa.data,
@@ -32,11 +39,12 @@ def adicionar_tarefas():
             usuario_id=current_user.id
         )
         database.session.add(tarefa)
+        database.session.flush()
         database.session.commit()
-        print('deu certo!!!!!!!! eu acho :) :>')
+        flash("Tarefa com checklist criada com sucesso!")
         return redirect(url_for('home'))
     else:
-        print('Erro no formulário: ')
+        print('Erro no formulário de criar tarefa: ')
         print(form_tarefa.errors)
 
     return render_template('adicionar_tarefas.html', form_tarefa=form_tarefa, titulo_pagina="Criar nova tarefa")

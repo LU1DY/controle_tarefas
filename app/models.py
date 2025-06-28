@@ -18,10 +18,12 @@ class Tarefa(database.Model):
     usuario_id = database.Column(database.Integer, database.ForeignKey('usuario.id', name="fk_usuario_tarefa"), nullable=False)
 
 
+
 class Usuario(database.Model, UserMixin):
     id = database.Column(database.Integer, primary_key=True)
     nome_usuario = database.Column(database.String(30), nullable=False)
     email = database.Column(database.String(120), nullable=False, unique=True)
     senha = database.Column(database.String(200), nullable=False)
     tarefas = database.relationship('Tarefa', backref='usuario', lazy=True)
+
 

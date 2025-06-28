@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Visualização de Tarefas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f6f6;
+      padding: 2rem;
+    }
+
+    .tarefa {
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .titulo {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .descricao {
+      margin: 0.5rem 0;
+      color: #555;
+    }
+
+    .info {
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    .checklist {
+      margin-top: 1rem;
+      padding-left: 1rem;
+    }
+
+    .checklist li {
+      margin-bottom: 0.4rem;
+    }
+
+    .done {
+      text-decoration: line-through;
+      color: green;
+    }
+
+    .pendente {
+      color: #b33;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tarefa Padrão -->
+  <div class="tarefa">
+    <div class="titulo">Estudar Flask</div>
+    <div class="descricao">Ler a documentação oficial e praticar com mini-projetos.</div>
+    <div class="info">Prazo: 20/06/2025 às 18:00 | Importância: Alta</div>
+  </div>
+
+  <!-- Tarefa Checklist -->
+  <div class="tarefa">
+    <div class="titulo">Checklist: Publicar artigo</div>
+    <div class="info">Checklist de etapas:</div>
+    <ul class="checklist">
+      <li><span class="done">✅ Escrever conteúdo</span></li>
+      <li><span class="done">✅ Revisar ortografia</span></li>
+      <li><span class="pendente">⬜ Agendar publicação</span></li>
+    </ul>
+  </div>
+
+  <!-- Tarefa Híbrida -->
+  <div class="tarefa">
+    <div class="titulo">Planejamento do Evento Anual</div>
+    <div class="descricao">Organizar tudo para o evento corporativo de final de ano.</div>
+    <div class="info">Prazo: 30/07/2025 às 14:00 | Importância: Média</div>
+    <div class="info">Checklist:</div>
+    <ul class="checklist">
+      <li><span class="done">✅ Definir local</span></li>
+      <li><span class="pendente">⬜ Contratar buffet</span></li>
+      <li><span class="pendente">⬜ Enviar convites</span></li>
+    </ul>
+  </div>
+
+</body>
+</html>

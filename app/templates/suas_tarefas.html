@@ -1,35 +1,103 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {%block head%}
+<title>Suas tarefas</title>
+{%endblock%} {%block body%}
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f6f6f6;
+    padding: 2rem;
+  }
 
-{%block head%}
-<title>Suas tarefas </title>
-{%endblock%}
+  .tarefa {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
 
-{%block body%}
+  .titulo {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .descricao {
+    margin: 0.5rem 0;
+    color: #555;
+  }
+
+  .info {
+    font-size: 0.9rem;
+    color: #777;
+  }
+
+  .checklist {
+    margin-top: 1rem;
+    padding-left: 1rem;
+  }
+
+  .checklist li {
+    margin-bottom: 0.4rem;
+    display: flex;
+  }
+
+  .done {
+    text-decoration: line-through;
+    color: green;
+  }
+
+  .pendente {
+    color: #b33;
+  }
+
+  .remover_tarefa,
+  .editar_tarefa {
+    color: white;
+    font-weight: 600;
+    font-size: 1.3rem;
+    background-color: black;
+    width: max-content;
+    border-radius: 1.5rem;
+    padding: 0.5rem 1rem;
+  }
+</style>
 <h1>Suas tarefas {{current_user.nome_usuario}} batata</h1>
-{%for tarefa in todas_tarefas%}
-<div class="tarefa" style="border: 1px solid #000">
-<h2>{{tarefa.titulo_tarefa}}</h2>
-<p>{{tarefa.descricao_tarefa}}</p>
-<div>{{tarefa.importancia_tarefa.value}}</div>
-<span>{{tarefa.data_conclusao_tarefa}}</span>
+
+{%include 'buscarTarefa.html'%} {%for tarefa in tarefas%}
+<div class="tarefa">
+  <div class="titulo">{{tarefa.titulo_tarefa}}</div>
+  <div class="descricao">{{tarefa.descricao_tarefa}}</div>
+  <div class="info">
+    Prazo: {{tarefa.data_conclusao_tarefa}} | Importância:
+    {{tarefa.importancia_tarefa.value}}
+  </div>
+  <div class="flex flex-row">
     <div class="remover_tarefa">
-        <form
-                    action="{{ url_for('remover_tarefa', id_tarefa=tarefa.id_tarefa) }}"
-                    method="POST"
-                    style="display: inline"
-                  >
-                    <button type="submit">Remover</button>
-                  </form>
+      <form
+        action="{{ url_for('remover_tarefa', id_tarefa=tarefa.id_tarefa) }}"
+        method="POST"
+        style="display: inline"
+      >
+        <button type="submit">Remover</button>
+      </form>
     </div>
     <div class="editar_tarefa">
-        <form
-                    action="{{ url_for('editar_tarefa', id_tarefa=tarefa.id_tarefa) }}"
-                    method="POST"
-                    style="display: inline"
-                  >
-                    <button type="submit">Editar</button>
-                  </form>
+      <form
+        action="{{ url_for('editar_tarefa', id_tarefa=tarefa.id_tarefa) }}"
+        method="POST"
+        style="display: inline"
+      >
+        <button type="submit">Editar</button>
+      </form>
     </div>
-    </div>
+  </div>
+</div>
 {%endfor%}
+
 {%endblock%}

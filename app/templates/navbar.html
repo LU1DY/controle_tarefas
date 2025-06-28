@@ -5,6 +5,7 @@
             {%if current_user.is_authenticated%}
             <li><a href="{{url_for('tarefas')}}">Tarefas</a></li>
             <li><a href="{{url_for('logout')}}">Sair</a></li>
+            <li><a href="{{url_for('adicionar_tarefas')}}">Adicionar</a></li>
             {%else%}
             <li><a href="">Serviços</a></li>
             <li><a href="">Sobre</a></li>
